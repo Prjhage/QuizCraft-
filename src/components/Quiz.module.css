@@ -1,0 +1,269 @@
+@keyframes criticalPulse {
+    0%,
+    100% {
+        transform: scale(1);
+        background-color: #efefef;
+        /* Light mode default */
+        border-color: #dddddd;
+        /* Light mode default */
+    }
+    50% {
+        transform: scale(0.95);
+        /* Slightly shrink */
+        background-color: #ffcccc;
+        /* Light red for urgency */
+        border-color: #ff9999;
+    }
+}
+
+@keyframes criticalPulseDark {
+    0%,
+    100% {
+        transform: scale(1);
+        background-color: #3f3f46;
+        /* Dark mode default */
+        border: none;
+        /* Dark mode default */
+    }
+    50% {
+        transform: scale(0.95);
+        /* Slightly shrink */
+        background-color: #6a040f;
+        /* Darker red for urgency */
+        border: 1px solid #d90429;
+        /* Optional: add a border in dark mode pulse */
+    }
+}
+
+.main {
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    padding-top: 5rem;
+    min-height: calc(100vh - 4rem);
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    color: #1a1a1a;
+}
+
+
+/* ✅ Dark Theme */
+
+:global(.dark) .main {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.topBar {
+    width: 100%;
+    max-width: 48rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.progressText {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+.timerWrapper {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #efefef;
+    border: 1px solid #dddddd;
+    /* Added/Modified for pulse animation */
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+:global(.dark) .timerWrapper {
+    background-color: #3f3f46;
+    border: none;
+    /* Added/Modified for pulse animation in dark mode */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+/* Styles for when the timer is in a "critical" (low time) state */
+
+.timerWrapper.critical {
+    animation: criticalPulse 1s infinite alternate;
+    /* Apply the pulse animation */
+}
+
+:global(.dark) .timerWrapper.critical {
+    animation: criticalPulseDark 1s infinite alternate;
+    /* Dark mode specific pulse */
+}
+
+.timerText {
+    font-size: 0.875rem;
+    font-weight: 600;
+    position: relative;
+    /* Added for potential text color change */
+    transition: color 0.3s ease;
+}
+
+
+/* Optional: Style for timer text when critical */
+
+.timerText.critical {
+    color: #d90429;
+    /* Red color for light mode */
+}
+
+:global(.dark) .timerText.critical {
+    color: #ff6b6b;
+    /* Lighter red for dark mode */
+}
+
+.question {
+    width: 100%;
+    max-width: 48rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 0 0.5rem;
+    color: #1a1a1a;
+}
+
+:global(.dark) .question {
+    color: #ffffff;
+}
+
+.form {
+    width: 100%;
+    max-width: 48rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding: 0 0.5rem;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 150ms;
+    font-weight: 500;
+    line-height: 1.5rem;
+    background-color: #ffffff;
+    border: 1px solid #ededed;
+    color: #333333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+:global(.dark) .option {
+    background-color: #262626;
+    border-color: #3f3f46;
+    color: #e0e0e0;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+}
+
+.option:hover {
+    background-color: #f8f8f8;
+    border-color: #ddeeff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+:global(.dark) .option:hover {
+    background-color: #2f2f2f;
+    border-color: #4fd1c5;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+}
+
+.option input[type="radio"]:checked+span {
+    font-weight: 600;
+}
+
+.option input[type="radio"] {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid #999999;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+:global(.dark) .option input[type="radio"] {
+    border-color: #64748b;
+}
+
+.option input[type="radio"]:checked {
+    background-color: #6366f1;
+    border-color: #6366f1;
+}
+
+:global(.dark) .option input[type="radio"]:checked {
+    background-color: #4fd1c5;
+    border-color: #4fd1c5;
+}
+
+.option input[type="radio"]:checked::before {
+    content: "";
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 9999px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nextBtn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s, transform 0.2s, opacity 0.2s;
+    outline: none;
+    background-color: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark) .nextBtn {
+    background-color: #14b8a6;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+}
+
+.nextBtn:hover:not(:disabled) {
+    background-color: #4338ca;
+    transform: translateY(-2px);
+}
+
+:global(.dark) .nextBtn:hover:not(:disabled) {
+    background-color: #0d9488;
+}
+
+.nextBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
