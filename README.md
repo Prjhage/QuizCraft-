@@ -96,7 +96,7 @@ Cross-origin support for development
 1️⃣ Clone the repository
 
 ```
-git clone https://github.com/your-username/multi-language-quiz-app.git
+git clone https://github.com/Prjhage/multi-language-quiz-app.git
 
 cd multi-language-quiz-app
 ```
