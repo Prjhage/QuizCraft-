@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node quiz-api-server/index.js",
+    "postinstall": "cd quiz-api-server && npm install"
   },
   "dependencies": {
     "axios": "^1.10.0",
