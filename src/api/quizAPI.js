@@ -1,18 +1,24 @@
 import axios from "axios";
-export const fetchQuestionsBySubject = async(subject) => {
-    const exclude =
+export const fetchQuestionsBySubject = async (subject) => {
+    const excludeData =
         JSON.parse(localStorage.getItem(`usedQuestions-${subject}`)) || [];
+    const exclude = Array.isArray(excludeData) ? [...new Set(excludeData)] : [];
 
     try {
-        console.log("Fetching:", subject);
+        console.log("Fetching questions for:", subject, "Excluding:", exclude.length);
         const response = await axios.post(
-            `http://localhost:5000/api/questions/${subject}`, { exclude }
+            `/api/questions/${subject}`, { exclude }
         );
-        console.log("Received:", response.data);
 
-        return response.data; // ✅ correct variable name
+        if (!response.data || !Array.isArray(response.data)) {
+            throw new Error("Invalid response format from server");
+        }
+
+        console.log("Received questions count:", response.data.length);
+
+        return response.data;
     } catch (err) {
-        console.error("Error fetching questions:", err);
+        console.error("Error fetching questions:", err.message || err);
         return [];
     }
 };

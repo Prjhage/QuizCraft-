@@ -14,6 +14,7 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [totalTime, setTotalTime] = useState(0);
 
   useEffect(() => {
     const loadQuestions = async () => {
@@ -29,6 +30,7 @@ export default function Quiz() {
     if (!isLoaded || questions.length === 0) return;
 
     const timer = setInterval(() => {
+      setTotalTime((prev) => prev + 1); // Track total elapsed time
       setRemaining((prev) => {
         if (prev === 1) {
           handleNext();
@@ -41,12 +43,46 @@ export default function Quiz() {
     return () => clearInterval(timer);
   }, [index, isLoaded, questions.length]); // Added questions.length to dependencies
 
+  const [toast, setToast] = useState(null);
+  const [animating, setAnimating] = useState(false);
+
+  const handleEndQuiz = () => {
+    // Collect all answered questions so far
+    const resultData = {
+      correct: score,
+      incorrect: index - score,
+      total: questions.length,
+      topic: language,
+      answers: answers,
+      time: totalTime,
+      isEarlySubmit: true
+    };
+
+    // Save used question IDs (only up to current index)
+    const usedIds = questions.slice(0, index).map((q) => q.id);
+    const existingUsed =
+      JSON.parse(localStorage.getItem(`usedQuestions-${language}`)) || [];
+    const updatedUsed = [...new Set([...existingUsed, ...usedIds])];
+    localStorage.setItem(
+      `usedQuestions-${language}`,
+      JSON.stringify(updatedUsed)
+    );
+
+    localStorage.setItem("quizResult", JSON.stringify(resultData));
+    navigate("/result");
+  };
+
   const handleNext = () => {
     const q = questions[index];
     if (!q) return;
 
     const isCorrect =
       selected !== null && q.options[selected] === q.correct_answer;
+
+    // Show Toast
+    setToast(isCorrect ? "Correct!" : "Oops! Incorrect");
+    setTimeout(() => setToast(null), 1500);
+
     if (isCorrect) setScore((prev) => prev + 1);
 
     const updatedAnswers = [
@@ -59,36 +95,51 @@ export default function Quiz() {
       },
     ];
 
-    if (index + 1 === questions.length) {
-      // Calculate final score for result page
-      const finalScore = isCorrect ? score + 1 : score;
+    setTimeout(() => {
+      if (index + 1 === questions.length) {
+        // Calculate final score for result page
+        const finalScore = isCorrect ? score + 1 : score;
 
-      const resultData = {
-        correct: finalScore,
-        incorrect: questions.length - finalScore,
-        total: questions.length,
-        // You might want to pass total time spent or average time per question if you're tracking that.
-        // For now, I'll remove `time` from here as it was `questions.length * 15 - remaining` which might not be accurate for overall time.
-        // If you need total time, you'd track a separate `totalTimeSpent` state.
-        topic: language,
-        answers: updatedAnswers,
-      };
+        const resultData = {
+          correct: finalScore,
+          incorrect: questions.length - finalScore,
+          total: questions.length,
+          topic: language,
+          answers: updatedAnswers,
+          time: totalTime + 1 // Include final second
+        };
 
-      localStorage.setItem("quizResult", JSON.stringify(resultData));
-      navigate("/result");
-    } else {
-      setIndex(index + 1);
-      setSelected(null);
-      setRemaining(15);
-      setAnswers(updatedAnswers);
-    }
+        // ✅ Save used question IDs to localStorage
+        const usedIds = questions.map((q) => q.id);
+        const existingUsed =
+          JSON.parse(localStorage.getItem(`usedQuestions-${language}`)) || [];
+        const updatedUsed = [...new Set([...existingUsed, ...usedIds])];
+        localStorage.setItem(
+          `usedQuestions-${language}`,
+          JSON.stringify(updatedUsed)
+        );
+
+        localStorage.setItem("quizResult", JSON.stringify(resultData));
+        navigate("/result");
+      } else {
+        setAnimating(true);
+        setTimeout(() => {
+          setIndex(index + 1);
+          setSelected(null);
+          setRemaining(15);
+          setAnswers(updatedAnswers);
+          setAnimating(false);
+        }, 300);
+      }
+    }, 1000); // Small delay to enjoy the toast
   };
 
   if (!isLoaded) {
     return (
-      <p style={{ textAlign: "center", marginTop: "3rem" }}>
-        Loading questions...
-      </p>
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>Finding the perfect questions for you...</p>
+      </div>
     );
   }
 
@@ -101,60 +152,84 @@ export default function Quiz() {
   }
 
   const q = questions[index];
-
-  // Determine if the timer should be in a critical state for CSS classes
-  const isTimerCritical = remaining <= 5; // Adjust threshold as needed
+  const isTimerCritical = remaining <= 5;
 
   return (
     <main className={styles.main}>
+      {toast && (
+        <div className={`${styles.toast} ${toast.includes("Correct") ? styles.correct : styles.wrong}`}>
+          {toast}
+        </div>
+      )}
+
       <div className={styles.topBar}>
         <div className={styles.progressText}>
           Question {index + 1} of {questions.length}
         </div>
         <div
-          className={`${styles.timerWrapper} ${
-            isTimerCritical ? styles.critical : ""
-          }`}
-        >
-          {/* Removed the timerCircle div as its functionality is now handled by the .timerWrapper's background and animation */}
-          <div
-            className={`${styles.timerText} ${
-              isTimerCritical ? styles.critical : ""
+          className={`${styles.timerWrapper} ${isTimerCritical ? styles.critical : ""
             }`}
+        >
+          <div className={styles.bubbleContainer}>
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className={styles.bubble}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  "--duration": `${2 + Math.random() * 2}s`,
+                  animationDelay: `${Math.random() * 2}s`
+                }}
+              />
+            ))}
+          </div>
+          <div
+            className={`${styles.timerText} ${isTimerCritical ? styles.critical : ""
+              }`}
           >
             {remaining}s
           </div>
         </div>
       </div>
 
-      <div className={styles.question}>
-        Q{index + 1}: {q.question}
+      <div className={`${styles.questionWrapper} ${animating ? styles.toastFadeOut : ""}`}>
+        <div className={styles.question}>
+          Q{index + 1}: {q.question}
+        </div>
+
+        <form className={styles.form}>
+          {q.options.map((opt, i) => (
+            <label key={i} className={styles.option}>
+              <input
+                type="radio"
+                name="option"
+                value={i}
+                className={styles.radio}
+                onChange={() => setSelected(i)}
+                checked={selected === i}
+              />
+              <span>{opt}</span>
+            </label>
+          ))}
+        </form>
+
+        <div className={styles.buttonGroup}>
+          <button
+            onClick={handleEndQuiz}
+            className={styles.endBtn}
+          >
+            End Quiz Early
+          </button>
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={selected === null || animating}
+            className={styles.nextBtn}
+          >
+            {index + 1 === questions.length ? "Finish Test" : "Next Question"}
+          </button>
+        </div>
       </div>
-
-      <form className={styles.form}>
-        {q.options.map((opt, i) => (
-          <label key={i} className={styles.option}>
-            <input
-              type="radio"
-              name="option"
-              value={i}
-              className={styles.radio}
-              onChange={() => setSelected(i)}
-              checked={selected === i}
-            />
-            <span>{opt}</span>
-          </label>
-        ))}
-      </form>
-
-      <button
-        type="button"
-        onClick={handleNext}
-        disabled={selected === null}
-        className={styles.nextBtn}
-      >
-        Next
-      </button>
     </main>
   );
 }

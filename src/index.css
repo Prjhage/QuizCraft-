@@ -1,12 +1,62 @@
-/* index.css or main.css */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --color-javascript: #ffdb58;
+  /* Clearer Mustard/Gold */
+  --color-python: #4b8bbe;
+  --color-java: #f89820;
+  --color-sql: #00d2ff;
+  --color-cpp: #0081cb;
+  --color-php: #8892be;
+  --color-ruby: #e0115f;
+  --color-dsa: #00ffab;
+  /* Crystal Clear DSA Mint */
+
+  --glass-bg: rgba(10, 10, 15, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.6);
+
+  --mesh-1: #050505;
+  --mesh-2: #0b0d1a;
+  --mesh-3: #08101a;
+}
 
 * {
-  box-sizing: inherit;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  min-height: 100vh;
+  background: radial-gradient(at 0% 0%, var(--mesh-1) 0, transparent 60%),
+    radial-gradient(at 50% 0%, var(--mesh-2) 0, transparent 60%),
+    radial-gradient(at 100% 0%, var(--mesh-3) 0, transparent 60%);
+  background-attachment: fixed;
+  background-color: #050505;
+  /* Black fallback */
+  color: #f8f9fa;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  border-radius: 12px;
+  border: 2px solid #050505;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }

@@ -1,46 +1,27 @@
-/* Light Theme (default) */
-
 .wrapper {
   flex: 1 1 0%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 5rem;
-  min-height: calc(100vh - 4rem);
+  padding: 6rem 2rem;
+  min-height: 100vh;
   box-sizing: border-box;
-  background-color: #f9f9f9;
-  color: #333333;
-}
-
-/* ✅ Dark Mode */
-
-:global(.dark) .wrapper {
-  background-color: #121212;
-  color: white;
-}
-
-@media (min-width: 640px) {
-  .wrapper {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-top: 6rem;
-  }
 }
 
 .header {
-  max-width: 36rem;
+  max-width: 52rem;
   text-align: center;
-  animation: fade-in-up 0.7s ease-out forwards;
+  margin-bottom: 5rem;
+  animation: fadeInDown 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-@keyframes fade-in-up {
+@keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -48,217 +29,119 @@
 }
 
 .title {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #212121;
-}
-
-:global(.dark) .title {
-  color: #ffffff;
-}
-
-@media (min-width: 640px) {
-  .title {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .title {
-    font-size: 3rem;
-    line-height: 1;
-  }
+  font-size: 4.5rem;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  margin-bottom: 2rem;
+  background: linear-gradient(145deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.15));
 }
 
 .subtitle {
-  font-size: 1rem;
-  line-height: 1.5rem;
-  margin-bottom: 3rem;
-  color: #666666;
-}
-
-:global(.dark) .subtitle {
-  color: #a1a1aa;
-}
-
-@media (min-width: 640px) {
-  .subtitle {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-}
-
-.highlight {
+  font-size: 1.5rem;
+  color: #94a3b8;
+  max-width: 36rem;
+  margin: 0 auto;
+  line-height: 1.6;
   font-weight: 500;
-  color: #333333;
-}
-
-:global(.dark) .highlight {
-  color: #e0e0e0;
+  letter-spacing: -0.01em;
 }
 
 .grid {
   width: 100%;
-  max-width: 64rem;
+  max-width: 80rem;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem;
-  animation: fade-in-up 0.7s ease-out forwards;
-  animation-delay: 0.1s;
-}
-
-@media (min-width: 640px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 3rem;
 }
 
 .card {
   position: relative;
-  /* Added: Essential for positioning pseudo-elements */
   z-index: 1;
-  /* Added: To ensure content is above the pseudo-element glow */
-  overflow: hidden;
-  /* Added: To clip the glowing border at rounded corners */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-radius: 1rem;
-  /* Existing, but critical for the effect */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: all 0.15s ease;
-  background-color: #ffffff;
-  border: 1px solid #ededed;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  color: #333333;
+  padding: 3.5rem 2rem;
+  border-radius: 2.5rem;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  text-decoration: none;
+  overflow: hidden;
+  opacity: 0;
+  animation: cardEntrance 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  animation-delay: calc(var(--index) * 0.12s);
 }
 
-:global(.dark) .card {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: transparent;
-  /* Changed: Border is now handled by pseudo-element */
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.15);
-  /* Subtle inner shadow */
-  color: #e0e0e0;
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* Nuan Style Animated Lighting Border for Dark Mode (.card::before) */
-
-:global(.dark) .card::before {
+.card::after {
   content: "";
   position: absolute;
-  top: -200%;
-  /* Start far above */
-  left: -200%;
-  /* Start far left */
-  width: 400%;
-  /* Make it large enough to cover the card when rotating */
-  height: 400%;
-  /* Make it large enough to cover the card when rotating */
-  background: conic-gradient(
-    from 0deg,
-    transparent 0%,
-    rgba(77, 201, 206, 0.8) 15%,
-    /* Teal/Cyan light */ transparent 30%,
-    transparent 70%,
-    rgba(147, 102, 234, 0.8) 85%,
-    /* Purple light */ transparent 100%
-  );
-  animation: rotateLight 10s linear infinite;
-  /* Animation duration and loop */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
   z-index: -1;
-  /* Place behind the card's content */
-  filter: blur(20px);
-  /* Creates the soft glow effect */
-  border-radius: inherit;
-  /* Inherit the card's border-radius */
-}
-
-/* To ensure the inner content of the card is always visible above the glow */
-
-:global(.dark) .card > * {
-  position: relative;
-  z-index: 2;
-  /* Higher than pseudo-elements' z-index -1 */
 }
 
 .card:hover {
-  border-color: #ddeeff;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  transform: translateY(-15px) scale(1.03);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+  background: rgba(30, 41, 59, 0.5);
 }
 
-:global(.dark) .card:hover {
-  /* When hovered in dark mode, you might want to adjust the glow or add another effect */
-  border-color: transparent;
-  /* Still transparent as pseudo-element is border */
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
-  transform: translateY(-2px);
+.card:hover::after {
+  opacity: 1;
 }
 
-/* Optional: You could make the glow brighter or change colors on hover for dark mode */
-
-:global(.dark) .card:hover::before {
-  filter: blur(25px);
-  /* Slightly more intense blur on hover */
-  /* background: conic-gradient(
-    from 0deg,
-    transparent 0%,
-    rgba(77, 201, 206, 1) 15%, // Brighter teal
-    transparent 30%,
-    transparent 70%,
-    rgba(147, 102, 234, 1) 85%, // Brighter purple
-    transparent 100%
-  ); */
+.iconWrapper {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.1);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #555555;
-  transition: transform 0.15s ease;
-}
-
-:global(.dark) .icon {
-  color: #6ee7b7;
-}
-
-.card:hover .icon {
-  transform: scale(1.1);
+.card:hover .iconWrapper {
+  transform: rotate(-10deg) scale(1.15);
+  box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.2), 0 0 30px currentColor;
 }
 
 .name {
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  color: #333333;
-  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+  color: #f8fafc;
+  transition: all 0.3s;
 }
 
-:global(.dark) .name {
-  color: #ffffff;
-}
-
-/* Keyframes for the rotating light effect (Nuan Style Border) */
-
-@keyframes rotateLight {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.card:hover .name {
+  transform: translateY(-2px);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
