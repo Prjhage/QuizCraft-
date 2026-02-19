@@ -30,8 +30,8 @@ app.post("/api/questions/:subject", (req, res) => {
 // Serve Frontend Static Files
 app.use(express.static(path.join(__dirname, "../dist")));
 
-// SPA Catch-all
-app.get("(.*)", (req, res) => {
+// SPA Catch-all (Middleware approach for Express 5)
+app.use((req, res) => {
     res.sendFile(path.join(__dirname, "../dist", "index.html"));
 });
 
