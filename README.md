@@ -38,11 +38,9 @@ Multi-Language Quiz App/
 
 ## 📸 Screenshots
 
-![Screenshot 2025-06-24 160214](https://github.com/user-attachments/assets/d1a40ab5-1a4f-499d-a225-0a24d2b1a3f9)
+<img width="1910" height="913" alt="Screenshot 2026-02-19 145313" src="https://github.com/user-attachments/assets/9ef9ca10-ff2d-4fbf-93c6-7c9f0431e9bf" />
+<img width="1910" height="913" alt="image" src="https://github.com/user-attachments/assets/257c573f-bce6-439f-8a16-20d20f5d9e04" />
 
-![Screenshot 2025-06-24 160506](https://github.com/user-attachments/assets/b28e8ecb-23bf-45b4-b24d-4ca4a216114d)
-
-![Screenshot 2025-06-25 132021](https://github.com/user-attachments/assets/798a3200-ef09-48a3-8609-5d68f0b48bd0)
 
 
 
